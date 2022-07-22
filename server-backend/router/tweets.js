@@ -9,6 +9,14 @@ const tweets = [{
     username: 'vnfmsqkek3',
     url: 'https://www.linkedin.com/in/%EC%9E%AC%ED%98%81-%EC%B5%9C-515606241/'
 },
+{
+    id:'2',
+    text: "test용 텍스트2",
+    createdAt: Date.now().toString(),
+    name: 'Zero',
+    username: 'ttt',
+    
+}
 ];
 
 const router = express.Router();
@@ -28,6 +36,16 @@ router.get('/', (req, res, next) => {
 });
 
 // GET /tweets/:id
+router.get('/:id', (req, res, next) => {
+    const id = req.params.id;
+    const tweet = tweets.find(t => t.id === id);
+    if(tweet) {
+        res.status(200).json(tweet);
+    }
+    else {
+        res.status(404).json({message: "Tweet ${id} not found"});
+    }
+})
 // POST /tweets
 // PUT /tweets/:id
 // DELETE /tweets/:id
