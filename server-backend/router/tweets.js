@@ -30,7 +30,7 @@ router.get('/', (req, res, next) => {
     //가지고 있는 배열의 아이템이 트윗을 전달받아서 트윗에 있는 username이 사용자가 원하는 username과 동일한 것만 골라낸다
     //username이 없는 경우라면 tweets를 할당한다
     const data = username 
-    ? tweets.filter(t => t.username === username)
+    ? tweets.filter(tweet => tweet.username === username)
     : tweets;
     res.status(200).json(data);
 });
@@ -38,7 +38,7 @@ router.get('/', (req, res, next) => {
 // GET /tweets/:id
 router.get('/:id', (req, res, next) => {
     const id = req.params.id;
-    const tweet = tweets.find(t => t.id === id);
+    const tweet = tweets.find(tweet => tweet.id === id);
     if(tweet) {
         res.status(200).json(tweet);
     }
