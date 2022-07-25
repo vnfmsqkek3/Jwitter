@@ -1,23 +1,7 @@
 import express from 'express';
 import 'express-async-errors';
+import * as tweetRepository from '../data/tweet.js';
 
-let tweets = [{
-    id:'1',
-    text: "test용 텍스트",
-    createdAt: Date.now().toString(),
-    name: 'jaehyeok',
-    username: 'vnfmsqkek3',
-    url: 'https://www.linkedin.com/in/%EC%9E%AC%ED%98%81-%EC%B5%9C-515606241/'
-},
-{
-    id:'2',
-    text: "test용 텍스트2",
-    createdAt: Date.now().toString(),
-    name: 'Zero',
-    username: 'ttt',
-    
-},
-];
 
 const router = express.Router();
 
@@ -30,34 +14,27 @@ router.get('/', (req, res, next) => {
     //가지고 있는 배열의 아이템이 트윗을 전달받아서 트윗에 있는 username이 사용자가 원하는 username과 동일한 것만 골라낸다
     //username이 없는 경우라면 tweets를 할당한다
     const data = username 
-    ? tweets.filter(tweet => tweet.username === username)
-    : tweets;
+    ? tweetRepository.getAllByUsername(username)
+    : tweetRepository.getAll();
     res.status(200).json(data);
 });
 
 // GET /tweets/:id
 router.get('/:id', (req, res, next) => {
     const id = req.params.id;
-    const tweet = tweets.find(tweet => tweet.id === id);
+    const tweet = tweetRepository.getById(id);
     if(tweet) {
         res.status(200).json(tweet);
     }
     else {
-        res.status(404).json({message: "Tweet ${id} not found"});
+        res.status(404).json({message: "Tweet id(${id}) not found"});
     }
 });
 
 // POST /tweets
 router.post('/', (req, res, next) => {
     const { text, name, username } = req.body;
-    const tweet = {
-        id: Date.now().toString(), //mysql id를 대체
-        text,
-        createdAt: new Date(),
-        name,
-        username,
-    };
-    tweets = [tweet, ...tweets];
+    const tweet = tweetRepository.creat(text, name, username);
     res.status(201).json(tweet);
 });
 
@@ -65,20 +42,19 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
     const id = req.params.id;
     const text = req.body.text;
-    const tweet = tweets.find((tweet) => tweet.id === id);
+    const tweet = tweetRepository.update(id, text);
     if (tweet){
-        tweet.text = text;
         res.status(200).json(tweet);
     }
     else {
-        res.status(404).json({message: "Tweet $({id}) not found"});
+        res.status(404).json({message: "Tweet id(${id}) not found"});
     }
 });
 
 // DELETE /tweets/:id
 router.delete('/:id', (req, res, next) => {
     const id = req.params.id;
-    tweets = tweets.filter((tweet) => tweet.id !== id);
+    tweetRepository.remove(id);
     res.sendStatus(204);
 })
 
