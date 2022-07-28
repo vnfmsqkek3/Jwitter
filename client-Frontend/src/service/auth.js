@@ -1,8 +1,8 @@
 export default class AuthService {
   async login(username, password) {
     return {
-      username: 'ellie',
-      token: 'abc1234',
+      username: 'jaehyeok',
+      token: '1234',
     };
   }
 
