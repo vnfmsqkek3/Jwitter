@@ -3,9 +3,9 @@ import bcrypt from 'bcrypt';
 import {} from 'express-async-errors';
 import * as userRepository from '../data/auth.js';
 
-const jwtSevretKey = '';
-const jwtExpiresInDays = '2d';
-const bcryptSaltRounds = 12;
+const jwtSecretKey = ''; //secret key
+const jwtExpiresInDays = '2d'; //만료시간
+const bcryptSaltRounds = 12; //bcrypt 길이
 
 export async function signup(req, res) {
     const { username, password, name, email, url } = req.body;
@@ -13,4 +13,14 @@ export async function signup(req, res) {
     if (found) {
         return res.status(409).json({ message: `${username} already exists`});
     }
+
+    const hashed = await bcrypt.hash(password, bcryptSaltRounds);
+    const userId = await userRepository.createUser({
+        username,
+        password: hashed,
+        name,
+        email,
+        url,
+    });
+
 }
