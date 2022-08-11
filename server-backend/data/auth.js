@@ -1,7 +1,7 @@
 let users = [
     {
         id: '1',
-        username: 'vnfmsqkek3',
+        username: 'jae',
         password: '$2b$10$8GpdlpSKuG7GAssEJswRtu1k6j6AivENg8cgjMbWCfNjiO9ktGJNa',
         name: 'jaehyeok',
         email: 'czy1023@gmail.com',
