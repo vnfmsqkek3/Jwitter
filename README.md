@@ -18,3 +18,8 @@ https://animated-jet-0ce.notion.site/API-Spec-Jweets-2619c23f03b04e96aa805778191
 
 - 로그인 기능
 ![image](https://user-images.githubusercontent.com/50416571/184051123-db1ea9e7-5e1d-4278-b171-2f361fa230f0.png)
+
+- 회원가입을 하지 않을 시
+![image](https://user-images.githubusercontent.com/50416571/184052465-a0f82c0c-9ff1-4cd7-8032-b1f6b250d10d.png)
+
+- 
