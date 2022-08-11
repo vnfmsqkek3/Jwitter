@@ -28,7 +28,7 @@ export async function getById(id){
     return tweets.find((tweet) => tweet.id === id);
 }
 
-export async function creat(text, name, username) {
+export async function create(text, name, username) {
     const tweet = {
         id: Date.now().toString(), //mysql id를 대체
         text,
