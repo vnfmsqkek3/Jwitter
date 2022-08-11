@@ -22,7 +22,7 @@ router.get('/:id', tweetController.getTweet);
 
 
 // POST /tweets
-router.post('/', validateTweet, tweetController.creatTweet);
+router.post('/', validateTweet, tweetController.createTweet);
 
 // PUT /tweets/:id
 router.put('/:id', validateTweet, tweetController.updateTweet);
