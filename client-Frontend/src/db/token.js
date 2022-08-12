@@ -10,6 +10,6 @@ export default class TokenStorage {
     }
 
     clearToken() {
-        localStorage.claer(TOKEN);
+        localStorage.clear(TOKEN);
     }
 }
