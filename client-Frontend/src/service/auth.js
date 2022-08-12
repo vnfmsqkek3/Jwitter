@@ -36,13 +36,6 @@ export default class AuthService {
     });
   }
 
-  async logout() {
-    const token = this.tokenStorage.getToken();
-    return this.http.fetch('/auth/me', {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-  }
 
   async logout() {
     this.tokenStorage.clearToken();
