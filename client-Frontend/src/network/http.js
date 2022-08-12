@@ -14,7 +14,7 @@ async fetch(url, options){
     });
     let data;
     try {
-        data = await response.json();
+        data = await res.json();
     } catch (error) {
         console.error(error);
     }
