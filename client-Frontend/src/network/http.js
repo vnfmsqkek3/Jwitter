@@ -21,7 +21,12 @@ async fetch(url, options){
 
     if (res.status > 299 || res.status < 200) {
         const message = data && data.message ? data.message : 'Something Worng!'
-        throw new Error(message);
+        const error = new Error(message);
+        if (res.status === 401) {
+            this.authErrorEventBus.notify(error);
+            return;
+        }
+        throw error;
     }
     return data;
 }

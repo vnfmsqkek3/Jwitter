@@ -12,8 +12,8 @@ import TokenStorage from './db/token';
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 const tokenStorage = new TokenStorage();
-const httpClient = new HttpClient(baseURL);
 const authErrorEventBus = new AuthErrorEventBus();
+const httpClient = new HttpClient(baseURL, authErrorEventBus);
 const authService = new AuthService(httpClient, tokenStorage);
 const tweetService = new TweetService(httpClient, tokenStorage);
 
