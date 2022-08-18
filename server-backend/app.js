@@ -6,7 +6,7 @@ import 'express-async-errors'; //promise나 async error를 잡는용
 import tweetsRouter from './router/tweets.js'
 import authRouter from './router/auth.js'
 import { config } from './config.js';
-import { Server, Socket } from 'socket.io';
+import { initSocket } from './connection/socket.js';
 
 //console.log(process.env)
 const app = express();
@@ -30,13 +30,4 @@ app.use((error, req, res, next) => { //서버 error 처리
 });
 
 const server = app.listen(config.host.port);
-const socketIO = new Server(server, {
-    cors: {
-        origin: "*",
-    }
-});
-
-socketIO.on('connection', (socket) => {
-    console.log(' Client is here!');
-    socket.emit('Jwitter', 'Hello! ')
-})
+initSocket(server);
