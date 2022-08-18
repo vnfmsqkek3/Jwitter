@@ -5,7 +5,9 @@ import helmet from 'helmet'; //보안용
 import 'express-async-errors'; //promise나 async error를 잡는용
 import tweetsRouter from './router/tweets.js'
 import authRouter from './router/auth.js'
+import { config } from './config.js';
 
+//console.log(process.env)
 const app = express();
 
 app.use(express.json());
@@ -26,4 +28,4 @@ app.use((error, req, res, next) => { //서버 error 처리
     res.sendStatus(500);
 });
 
-app.listen(8080);
+app.listen(config.host.port);
