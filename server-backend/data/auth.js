@@ -2,7 +2,7 @@ let users = [
     {
         id: '1',
         username: 'jae',
-        password: '$2b$10$8GpdlpSKuG7GAssEJswRtu1k6j6AivENg8cgjMbWCfNjiO9ktGJNa',
+        password: '$2b$10$BkAY8ZO3y92FDYg.8rFRpeAxMVcSNcFkKuaGp5VwoVK5IB4qp2zTe', //bcrypt, abcd1234
         name: 'jaehyeok',
         email: 'czy1023@gmail.com',
         url: 'https://github.com/vnfmsqkek3'
