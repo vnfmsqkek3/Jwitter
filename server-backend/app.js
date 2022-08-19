@@ -30,7 +30,7 @@ app.use((error, req, res, next) => { //서버 error 처리
     res.sendStatus(500);
 });
 
-db.getConnection().then(connection => console.log(connection));
+db.getConnection();
 
 const server = app.listen(config.host.port);
 initSocket(server);
