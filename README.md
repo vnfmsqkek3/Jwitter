@@ -27,3 +27,45 @@ https://animated-jet-0ce.notion.site/API-Spec-Jweets-2619c23f03b04e96aa805778191
 ![image](https://user-images.githubusercontent.com/50416571/184052465-a0f82c0c-9ff1-4cd7-8032-b1f6b250d10d.png)
 
 - 
+2022-08-19
+MySQL 적용
+
+**SCHEMA
+
+```
+CREATE SCHEMA `Jwitter` ;
+```
+
+```
+CREATE TABLE `Jwitter`.`users` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `usersname` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(128) NOT NULL,
+  `name` VARCHAR(128) NOT NULL,
+  `email` VARCHAR(128) NOT NULL,
+  `url` TEXT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `usersname_UNIQUE` (`usersname` ASC) VISIBLE);
+```
+
+```
+CREATE TABLE `Jwitter`.`tweets` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `text` TEXT NOT NULL,
+  `createdAt` VARCHAR(45) NOT NULL,
+  `userId` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
+```
+
+```
+ALTER TABLE `Jwitter`.`tweets` 
+ADD INDEX `fk_tweets_1_idx` (`userId` ASC) VISIBLE;
+;
+ALTER TABLE `Jwitter`.`tweets` 
+ADD CONSTRAINT `id`
+  FOREIGN KEY (`userId`)
+  REFERENCES `Jwitter`.`users` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+```
