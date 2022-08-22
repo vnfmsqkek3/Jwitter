@@ -1,7 +1,7 @@
 import { db } from '../db/database.js';
 import * as userRepository from './auth.js'
 
-const SELECT_JOIN = 'SELECT tw.id, tw.text, tw.createdAt, us.username, us.name, us.url FROM tweets as tw JOIN users as us ON tw.userId=us.id'
+const SELECT_JOIN = 'SELECT tw.id, tw.text, tw.createdAt, tw.userId, us.username, us.name, us.url FROM tweets as tw JOIN users as us ON tw.userId=us.id'
 const ORDER_DESC = 'ORDER BY tw.createdAt DESC'
 export async function getAll() {
     return db.execute(`${SELECT_JOIN} ${ORDER_DESC}`)
@@ -20,14 +20,14 @@ export async function getById(id) {
 }
 
 export async function create(text, userId) {
-    return db.execute('INSERT INTO tweets (text, createdAt, userId VALUES(?,?,?)',
-        [text, new Date(), userId]
-    ).then(result => getById(result[0].insertId));
+    return db.execute('INSERT INTO tweets (text, createdAt, userId) VALUES(?,?,?)',
+        [text, new Date(), userId])
+        .then(result => getById(result[0].insertId));
 }
 
 export async function update(id, text) {
     return db.execute('UPDATE tweets SET text=? WHRE id=?', [text, id])
-    .then(() => getById(id));
+        .then(() => getById(id));
 }
 
 export async function remove(id) {
