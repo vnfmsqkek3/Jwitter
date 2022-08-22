@@ -38,7 +38,6 @@ export async function login(req, res) {
 }
 
 function createJwtToken(id) {
-    console.log(config.jwt.secretKey);
     return jwt.sign({ id }, config.jwt.secretKey, { expiresIn: config.jwt.expiresInSec });
 }
 
