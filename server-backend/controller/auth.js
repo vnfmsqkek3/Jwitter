@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { } from 'express-async-errors';
 import * as userRepository from '../data/auth.js';
-import { config } from '../config.js'
+import { config } from '../config.js';
 
 
 export async function signup(req, res) {
@@ -38,7 +38,6 @@ export async function login(req, res) {
 }
 
 function createJwtToken(id) {
-    console.log(config.jwt.secretKey);
     return jwt.sign({ id }, config.jwt.secretKey, { expiresIn: config.jwt.expiresInSec });
 }
 

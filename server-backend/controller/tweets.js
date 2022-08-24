@@ -1,16 +1,13 @@
 import * as tweetRepository from '../data/tweet.js';
+import { getSocketIO } from '../connection/socket.js';
 
 export async function getTweets(req, res) {
     const username = req.query.username;
-
-    //username이 있다면 현재 가지고 있는 tweets에서 filter를 해준다.
-    //가지고 있는 배열의 아이템이 트윗을 전달받아서 트윗에 있는 username이 사용자가 원하는 username과 동일한 것만 골라낸다
-    //username이 없는 경우라면 tweets를 할당한다
     const data = await (username
         ? tweetRepository.getAllByUsername(username)
         : tweetRepository.getAll());
     res.status(200).json(data);
-};
+}
 
 export async function getTweet(req, res, next) {
     const id = req.params.id;
@@ -26,6 +23,7 @@ export async function createTweet(req, res, next) {
     const { text } = req.body;
     const tweet = await tweetRepository.create(text, req.userId);
     res.status(201).json(tweet);
+    getSocketIO().emit('tweets', tweet);
 }
 
 export async function updateTweet(req, res, next) {
