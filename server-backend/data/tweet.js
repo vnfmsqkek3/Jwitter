@@ -1,8 +1,7 @@
-import { db } from '../db/database.js';
 import SQ from 'sequelize';
 import { sequelize } from '../db/database.js';
 import { User } from './auth.js'
-import { DynamoDB } from 'aws-nuke/src/resources/index.js';
+
 const DataTypes = SQ.DataTypes;
 const Sequelize = SQ.Sequelize;
 
@@ -77,5 +76,8 @@ export async function update(id, text) {
 }
 
 export async function remove(id) {
-    return db.execute('DELETE FROM tweets WHERE id=?', [id])
+    return Tweet.findByPk(id)
+    .then(tweet => {
+        tweet.destroy();
+    });
 }
