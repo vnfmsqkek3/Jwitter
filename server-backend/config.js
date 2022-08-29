@@ -23,7 +23,7 @@ export const config = {
     db: {
         host: required('DB_HOST'),
         user: required('DB_USER'),
-        databse: required('DB_DATABASE'),
+        database: required('DB_DATABASE'),
         password: required('DB_PASSWORD'),
     },
 };
