@@ -20,32 +20,40 @@ const Tweet = sequelize.define('tweet', {
 });
 Tweet.belongsTo(User); //tweet은 user에 포함이 됨
 
-const SELECT_JOIN = 'SELECT tw.id, tw.text, tw.createdAt, tw.userId, us.username, us.name, us.url FROM tweets as tw JOIN users as us ON tw.userId=us.id'
-const ORDER_DESC = 'ORDER BY tw.createdAt DESC'
+const INCLUDE_USER = {
+    attributes: [
+        'id',
+        'text',
+        'createdAt',
+        'userId',
+        [Sequelize.col('user.name'), 'name'],
+        [Sequelize.col('user.username'), 'username'],
+        [Sequelize.col('user.url'), 'url'],
+    ],
+    include: {
+        model: User,
+        attributes: [],
+    },
+};
+
+const ORDER_DESC = {
+    order: [['createdAt', 'DESC']],
+};
+
 
 export async function getAll() {
-    return Tweet.findAll({
-        attributes: [
-            'id',
-            'text',
-            'createdAt',
-            'userId',
-            [Sequelize.col('user.name'), 'name'],
-            [Sequelize.col('user.username'), 'username'],
-            [Sequelize.col('user.url'), 'url'],
-        ],
-        include: {
-            model: User,
-            attributes: []
-        },
-        order: [['createdAt', 'DESC']], //받아오는 순서(최근거가 맨 위로)
-    }).then((data) => { console.log(data); return data });
+    return Tweet.findAll({ ...INCLUDE_USER, ...ORDER_DESC });
 }
 
 export async function getAllByUsername(username) {
-    return db
-        .execute(`${SELECT_JOIN} WHERE username=? ${ORDER_DESC}`, [username])
-        .then((result) => result[0]);
+    return Tweet.findAll({
+        ...INCLUDE_USER,
+        ...ORDER_DESC,
+        include: {
+            ...INCLUDE_USER.include,
+            where: { username },
+        },
+    });
 }
 
 export async function getById(id) {
