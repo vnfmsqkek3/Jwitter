@@ -65,12 +65,15 @@ export async function getById(id) {
 
 export async function create(text, userId) {
     return Tweet.create({ text, userId })
-    .then((data) => this.getById(data.dataValues.id));
+        .then((data) => this.getById(data.dataValues.id));
 };
 
 export async function update(id, text) {
-    return db.execute('UPDATE tweets SET text=? WHRE id=?', [text, id])
-        .then(() => getById(id));
+    return Tweet.findByPk(id, INCLUDE_USER)
+        .then(tweet => {
+            tweet.text = text;
+            return tweet.save();
+        });
 }
 
 export async function remove(id) {
