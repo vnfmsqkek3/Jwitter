@@ -41,5 +41,5 @@ export async function findById(id) {
 }
 
 export async function createUser(user) {
-  return User.create(user).then((data) => data.dataValue.id);
+  return User.create(user).then((data) => data.dataValues.id);
 }
