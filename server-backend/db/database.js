@@ -1,11 +1,9 @@
-import mysql from 'mysql2';
 import { config } from '../config.js';
+import SQ from 'sequelize';
 
-const pool = mysql.createPool({
-  host: config.db.host,
-  user: config.db.user,
-  database: config.db.databse,
-  password: config.db.password,
+const { host ,user, database, password } = config.db;
+export const sequelize = new SQ.Sequelize(database, user, password, {
+    host,
+    dialect: 'mysql',
+    logging: false, //db logging (기본값 true)
 });
-
-export const db = pool.promise();
