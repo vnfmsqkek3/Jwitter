@@ -57,16 +57,16 @@ export async function getAllByUsername(username) {
 }
 
 export async function getById(id) {
-    return db.execute(`${SELECT_JOIN} WHERE tw.id=?`, [id])
-        .then((result) => result[0][0]);
+    return Tweet.findOne({
+        where: { id },
+        ...INCLUDE_USER,
+    })
 }
 
 export async function create(text, userId) {
-    return Tweet.create({ text, userId }).then((data) => {
-        console.log(data);
-        return data
-    });
-}
+    return Tweet.create({ text, userId })
+    .then((data) => this.getById(data.dataValues.id));
+};
 
 export async function update(id, text) {
     return db.execute('UPDATE tweets SET text=? WHRE id=?', [text, id])
