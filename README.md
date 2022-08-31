@@ -71,4 +71,8 @@ ADD CONSTRAINT `id`
 ```
 
 2022-08-31
-보안 업데이트
+- 보안 업데이트
+ 1. 문제점 (로컬스토리지에서 서버에서 받아온 JWT토큰을 볼 수 있어서 보안상 취약함)
+ ![image](https://user-images.githubusercontent.com/50416571/187573126-698c01b7-3ac7-4659-858d-1179d115f9bc.png)
+ 
+ 
