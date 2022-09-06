@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan'; //디버깅용
 import helmet from 'helmet'; //보안용
+import cookieParser from 'cookie-parser';
 import 'express-async-errors'; //promise나 async error를 잡는용
 import tweetsRouter from './router/tweets.js'
 import authRouter from './router/auth.js'
@@ -12,9 +13,16 @@ import { sequelize } from './db/database.js'
 //console.log(process.env)
 const app = express();
 
+const corsOption = {
+    origin: config.cors.allowedOrigin,
+    optionSusccessStatus: 200,
+    Credential : true, //allow the Acess-Control-Allow-Credentials
+}
+
 app.use(express.json());
+app.use(cookieParser());
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOption));
 app.use(morgan('tiny'));
 
 
