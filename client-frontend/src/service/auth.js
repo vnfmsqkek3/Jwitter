@@ -14,8 +14,6 @@ export default class AuthService {
         url,
       }),
     });
-    this.tokenStorage.saveToken(data.token);
-    return data;
   }
 
   async login(username, password) {
@@ -32,6 +30,8 @@ export default class AuthService {
   }
 
   async logout() {
-    //ToDO
+    return this.http.fetch('/auth/logout', {
+      method: 'POST',
+    });
   }
 }
