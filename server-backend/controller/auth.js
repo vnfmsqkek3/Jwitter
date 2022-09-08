@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 import {} from "express-async-errors";
 import * as userRepository from "../data/auth.js";
 import { config } from "../config.js";
-import { generate } from "fastify-cli/generate.js";
 
 function createJwtToken(id) {
   return jwt.sign({ id }, config.jwt.secretKey, {
