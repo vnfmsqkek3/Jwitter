@@ -11,6 +11,7 @@ export default class HttpClient {
         'Content-Type': 'application/json',
         ...options.headers,
       },
+      credentials: 'include',
     });
     let data;
     try {

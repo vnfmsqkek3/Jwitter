@@ -1,8 +1,12 @@
+//외부 라이브러리
 import express from 'express';
 import cors from 'cors';
+import 'express-async-errors'; //promise나 async error를 잡는용
 import morgan from 'morgan'; //디버깅용
 import helmet from 'helmet'; //보안용
-import 'express-async-errors'; //promise나 async error를 잡는용
+import cookieParser from 'cookie-parser';
+
+//내부 라이브러리
 import tweetsRouter from './router/tweets.js'
 import authRouter from './router/auth.js'
 import { config } from './config.js';
@@ -12,9 +16,16 @@ import { sequelize } from './db/database.js'
 //console.log(process.env)
 const app = express();
 
+const corsOption = {
+    origin: config.cors.allowedOrigin,
+    optionsSuccessStatus: 200,
+    credentials: true, // allow the Access-Control-Allow-Credentials
+  };
+
 app.use(express.json());
+app.use(cookieParser());
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOption));
 app.use(morgan('tiny'));
 
 

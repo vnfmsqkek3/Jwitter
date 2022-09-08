@@ -33,6 +33,8 @@ router.post('/signup', validateSignup, authController.signup);
 
 router.post('/login', validateCredential, authController.login);
 
+router.post('/logout', authController.logout);
+
 router.get('/me', isAuth, authController.me); //로그인을 한 다음 유요한지 안한지를 확인하는 API
 
 export default router;
