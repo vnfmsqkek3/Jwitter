@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import {} from "express-async-errors";
 import * as userRepository from "../data/auth.js";
 import { config } from "../config.js";
+import { generate } from "fastify-cli/generate.js";
 
 function createJwtToken(id) {
   return jwt.sign({ id }, config.jwt.secretKey, {
@@ -65,4 +66,13 @@ export async function me(req, res, next) {
     return res.status(404).json({ message: "User not found" });
   }
   res.status(200).json({ token: req.token, username: user.username });
+}
+
+export async function csrfToken (req, res, next) {
+  const csrfToken = await generateCSRFToken();
+  res.status(200).json({ csrfToken });
+}
+
+export function generateCSRFToken() {
+  return bcrypt.hash(config.csrf.plainToken, 1); //한자리의 랜덤한 해쉬코드를 만들기 위해 1을 넣음
 }
