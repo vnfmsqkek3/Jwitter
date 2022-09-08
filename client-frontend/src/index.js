@@ -12,7 +12,7 @@ import Socket from './network/socket';
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 const authErrorEventBus = new AuthErrorEventBus();
-const httpClient = new HttpClient(baseURL, authErrorEventBus);
+const httpClient = new HttpClient(baseURL, authErrorEventBus, ()=> fetchToken);
 const authService = new AuthService(httpClient);
 const socketClient = new Socket(baseURL, () => fetchToken());
 const tweetService = new TweetService(httpClient, socketClient);

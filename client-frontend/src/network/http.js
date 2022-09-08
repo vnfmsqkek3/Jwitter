@@ -2,6 +2,7 @@ export default class HttpClient {
   constructor(baseURL, authErrorEventBus) {
     this.baseURL = baseURL;
     this.authErrorEventBus = authErrorEventBus;
+    this.getCsrfToken = this.getCsrfToken;
   }
 
   async fetch(url, options) {
@@ -10,6 +11,7 @@ export default class HttpClient {
       headers: {
         'Content-Type': 'application/json',
         ...options.headers,
+        '_csrf-token' : this.getCsrfToken(),
       },
       credentials: 'include',
     });
