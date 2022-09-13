@@ -12,6 +12,7 @@ import authRouter from './router/auth.js'
 import { config } from './config.js';
 import { initSocket } from './connection/socket.js';
 import { sequelize } from './db/database.js'
+import { csrfCheck } from './middleware/csrf.js';
 
 //console.log(process.env)
 const app = express();
@@ -28,7 +29,7 @@ app.use(helmet());
 app.use(cors(corsOption));
 app.use(morgan('tiny'));
 
-
+app.use(csrfCheck);
 app.use('/tweets', tweetsRouter); // "/tweets"로 접속했을 때 tweetsRoute로 연결
 app.use('/auth', authRouter);
 
