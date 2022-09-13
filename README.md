@@ -116,4 +116,93 @@ function setToken(res, token) {
     });
 ```
 
- 
+2022-09-13
+- 보안 업데이트 (CSRF Attack)
+
+Cross-Site Request Forgery : authenticated된 사용자가 원하지 않는 action을 하도록 만드는 공격. 
+
+문제 : local storage나 cookie에 저장된 데이터를 해커가 자바스크립트를 이용해 해커가 읽어갈 수 있음.
+
+
+해결 logic
+1. client가 server에게 CsrfToken 요청
+2. server로 부터 CSRF token을 받음 
+3. csrf_token을 이용해 server -> DB login요청
+4. client는 HTTP Only Cookie: token=JWT 와 csrf_token을 application 메모리 상에 보관
+5. 이후 client 요청때 JWT토큰을 HTTP Only옵션을 cookie로도 보내고, csrf_token을 Header에 붙임으로써 CSRF Attack을 예방.
+
+결과
+request를 한다고 해서 브라우저에 있는 HTTP Only cookie를 세션 라이딩을 한다고 해도 csrf_token이 있어야 함으로, application에서 발행받은 csrf_token을 이용해 CSRF Attack의 취약점을 보완할 수 있다.
+
+```
+// server/middleware/csrf.js
+export const csrfCheck = (req, res, next) => {
+  if (
+    req.method === 'GET' ||
+    req.method === 'OPTIONS' ||
+    req.method === 'HEAD'
+  ) {
+    return next();
+  }
+
+  const csrfHeader = req.get('_csrf-token');
+
+  if (!csrfHeader) {
+    console.warn('Missing required "_csrf-token" header.', req.headers.origin);
+    return res.status(403).json({ message: 'Failed CSRF check' });
+  }
+
+  validateCsrfToken(csrfHeader)
+    .then((valid) => {
+      if (!valid) {
+        console.warn(
+          'Value provided in "_csrf-token" header does not validate.',
+          req.headers.origin,
+          csrfHeader
+        );
+        return res.status(403).json({ message: 'Failed CSRF check' });
+      }
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).json({ message: 'Something went wrong' });
+    });
+};
+
+async function validateCsrfToken(csrfHeader) {
+  return bcrypt.compare(config.csrf.plainToken, csrfHeader);
+}
+```
+
+```
+// server/router/auth.js
+
+router.get('/csrf-token', authController.csrfToken);
+```
+
+```
+// app.js
+
+import { csrfCheck } from './middleware/csrf.js';
+
+app.use(csrfCheck);
+```
+
+```
+// server/controller/auth.js
+
+export async function csrfToken (req, res, next) {
+  const csrfToken = await generateCSRFToken();
+  res.status(200).json({ csrfToken });
+}
+
+export function generateCSRFToken() {
+  return bcrypt.hash(config.csrf.plainToken, 1); //한자리의 랜덤한 해쉬코드를 만들기 위해 1을 넣음
+}
+
+```
+
+
+
+
