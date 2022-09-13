@@ -1,37 +1,39 @@
+import axios from "axios";
+
 export default class HttpClient {
   constructor(baseURL, authErrorEventBus, getCsrfToken) {
-    this.baseURL = baseURL;
     this.authErrorEventBus = authErrorEventBus;
     this.getCsrfToken = getCsrfToken;
+    this.clinet = axios.create({
+      baseURL: baseURL,
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    });
   }
 
   async fetch(url, options) {
-    const res = await fetch(`${this.baseURL}${url}`, {
-      ...options,
+    const { body, method, headers } = options;
+    const req = {
+      url,
+      method,
       headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-        '_csrf-token' : this.getCsrfToken(),
+        ...headers,
+        "_csrf-token": this.getCsrfToken(),
       },
-      credentials: 'include',
-    });
-    let data;
-    try {
-      data = await res.json();
-    } catch (error) {
-      console.error(error);
-    }
+      data: body,
+    };
 
-    if (res.status > 299 || res.status < 200) {
-      const message =
-        data && data.message ? data.message : 'Something went wrong! 🤪';
-      const error = new Error(message);
-      if (res.status === 401) {
-        this.authErrorEventBus.notify(error);
-        return;
+    try {
+      const res = await this.clinet(req);
+      return res.data;
+    } catch (err) {
+      if (err.response) {
+        const data = err.response.datal;
+        const message =
+          data && data.message ? data.message : "Something went wrong! 🤪";
+          throw new Error(message);
       }
-      throw error;
+      throw new Error('connection error');
     }
-    return data;
   }
 }
